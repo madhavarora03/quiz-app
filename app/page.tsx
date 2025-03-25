@@ -1,5 +1,9 @@
-import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/theme-toggle";
 
 export default function Home() {
-  return <Button>Click me</Button>;
+  return (
+    <div>
+      <ModeToggle />
+    </div>
+  );
 }
