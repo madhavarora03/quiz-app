@@ -17,3 +17,9 @@ export const userRegisterSchema = z.object({
   name: z.string({ required_error: "Name is required!" }),
   password: z.string({ required_error: "Password is required!" }),
 });
+
+export const validateUserSchema = z.object({
+  verificationCode: z.string({
+    required_error: "Verification code is required!",
+  }),
+});

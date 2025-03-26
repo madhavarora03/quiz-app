@@ -1,5 +1,7 @@
 import { userRegisterSchema } from "@/validations";
+import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { sendMail } from "@/lib/email-service";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -13,8 +15,6 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    console.log("Validated user data:", validatedBody.data);
-
     const { email, name, password, username } = validatedBody.data;
 
     const existingUserByEmail = await prisma.user.findUnique({
@@ -74,6 +74,15 @@ export async function POST(request: NextRequest) {
         verificationExpiry: true,
       },
     });
+
+    const info = await sendMail({
+      email: "garvit@gmail.com",
+      sendTo: newUser.email,
+      subject: "Verify your account",
+      text: `Hi ${newUser.name}! Your verification code ${verificationCode}.`,
+    });
+
+    console.log(info);
 
     return NextResponse.json(
       { message: "User registered successfully!", data: newUser },
